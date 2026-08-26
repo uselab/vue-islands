@@ -1,0 +1,21 @@
+# Rider IDE
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# TypeScript
+build/
+*.tsbuildinfo
+
+# Node
+node_modules/
+
+# Environment
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
