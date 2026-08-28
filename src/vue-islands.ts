@@ -158,7 +158,6 @@ const getPropsFromElement = (el: HTMLElement) => {
     return Object.entries(allProps).reduce<GetVNodeProps>(
         (result, [key, value]) => ({
             ...result,
-            [key]: value,
             [normalizeKey(key)]: value,
         }),
         {}

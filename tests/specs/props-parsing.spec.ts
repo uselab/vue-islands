@@ -109,7 +109,7 @@ test('resolves dot and bracket notation in prop names into nested objects and ar
     expect(dump.rawProps.colors).toEqual(['red']);
 });
 
-test('normalizes a data-prefixed, non-JSON attribute name by stripping the prefix and camelCasing it', async ({
+test('normalizes a data-prefixed, non-JSON attribute name by stripping the prefix and camelCasing it, without keeping the raw key', async ({
     page,
     mountIsland,
     readProbeDump,
@@ -127,6 +127,7 @@ test('normalizes a data-prefixed, non-JSON attribute name by stripping the prefi
 
     const dump = await readProbeDump(probe);
     expect(dump.rawProps.userRole).toBe('admin');
+    expect(dump.rawProps).not.toHaveProperty('data-user-role');
 });
 
 test('parses JSON when a plain attribute name ends in -json', async ({
