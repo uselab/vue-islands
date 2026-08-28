@@ -33,7 +33,9 @@
         "prepublishOnly": "npm run build",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit",
+        "test": "playwright test",
+        "test:ui": "playwright test --ui"
     },
     "peerDependencies": {
         "vue": "^3.0.0",
@@ -50,7 +52,9 @@
     "devDependencies": {
         "@eslint/js": "^10.0.1",
         "@microsoft/api-extractor": "^7.59.0",
+        "@playwright/test": "^1.62.1",
         "@types/lodash": "^4.17.25",
+        "@types/node": "^26.4.0",
         "eslint": "^10.9.1",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-prettier": "^5.5.6",

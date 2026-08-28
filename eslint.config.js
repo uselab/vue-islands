@@ -28,5 +28,18 @@ export default tseslint.config(
         files: ['**/*.js'],
         extends: [tseslint.configs.disableTypeChecked],
     },
+    {
+        files: [
+            'playwright.config.ts',
+            'tests/specs/**/*.ts',
+            'tests/harness/vite.config.ts',
+        ],
+        languageOptions: {
+            globals: globals.node,
+        },
+        rules: {
+            'no-console': 'off',
+        },
+    },
     prettierRecommended
 );
