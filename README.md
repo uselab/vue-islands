@@ -230,4 +230,5 @@ npm install
 npm run build      # builds dist/ with Vite (library mode) + rolled-up .d.ts
 npm run typecheck
 npm run lint
+npm run test 
 ```
