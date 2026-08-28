@@ -22,6 +22,11 @@ import { memoize } from 'lodash';
 type GetVNodeProps = Record<string, unknown>;
 export type GetVNode = (props: GetVNodeProps, slots?: Slots) => VNode;
 export type GetVNodeFunction = (name?: string) => GetVNode | undefined;
+export type WithRawProps<
+    Props extends Record<string, unknown> = Record<string, unknown>,
+> = {
+    rawProps?: Partial<Props>;
+};
 
 // Merge props and make arrays from props that are repeated
 const mergeProps = (
@@ -338,11 +343,7 @@ export const initiateVueIslands = (
                 ...result,
                 {
                     element,
-                    vNode: getVNodeFromElement(
-                        element,
-                        vnodesGetter,
-                        devMode
-                    ),
+                    vNode: getVNodeFromElement(element, vnodesGetter, devMode),
                 },
             ];
         }, [])
@@ -382,11 +383,6 @@ export const initiateVueIslands = (
         });
 };
 
-export type WithRawProps<
-    Props extends Record<string, unknown> = Record<string, unknown>,
-> = {
-    rawProps?: Partial<Props>;
-};
 export const validateRawProps = <Props extends object & WithRawProps>(
     result: ZodSafeParseResult<Props>,
     props: Props
