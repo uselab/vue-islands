@@ -227,10 +227,8 @@ initiateVueIslands(components);
 
 ```bash
 npm install
-npm run build      # builds dist/ with Vite (library mode) + rolled-up .d.ts
-npm run typecheck
-npm run lint
-npm run test 
+npm run build
+npm run quality # runs typecheck, lint, and tests
 ```
 
 `npm install` also sets up a `pre-push` git hook (via `simple-git-hooks`) that runs
