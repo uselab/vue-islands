@@ -9,6 +9,7 @@ import {
     type VNode,
     type App,
     getCurrentInstance,
+    type Component,
 } from 'vue';
 import type { ZodSafeParseResult } from 'zod';
 import camelCase from 'lodash/camelCase';
@@ -166,7 +167,8 @@ const getPropsFromElement = (el: HTMLElement) => {
 
 const getVNodeFromElement = (
     element: HTMLElement,
-    vnodesGetter: GetVNodeFunction
+    vnodesGetter: GetVNodeFunction,
+    devMode: boolean
 ): VNode => {
     const componentName = element.dataset.component;
     const getVNodesFunction = vnodesGetter(componentName);
@@ -187,7 +189,10 @@ const getVNodeFromElement = (
                 return [...result, h(Comment, node.textContent)];
             }
             if (isHtmlElement(node)) {
-                return [...result, getVNodeFromElement(node, vnodesGetter)];
+                return [
+                    ...result,
+                    getVNodeFromElement(node, vnodesGetter, devMode),
+                ];
             }
             return result;
         }, []);
@@ -214,7 +219,7 @@ const getVNodeFromElement = (
     };
 
     if (getVNodesFunction) {
-        if (import.meta.env.MODE === 'development') {
+        if (devMode) {
             // eslint-disable-next-line no-console
             console.info(
                 `[semantic-html-to-vue] Rendering component: ${componentName}`
@@ -285,11 +290,24 @@ const appendVueIslandInElement = (
     delete element.dataset.vCloak;
 };
 
+export const createVNodeFunction =
+    (component: Component): GetVNode =>
+    (props, slots) =>
+        h(
+            component,
+            { rawProps: props, ...props } satisfies WithRawProps,
+            slots
+        );
+
 export const initiateVueIslands = (
     components: Record<string, GetVNode>,
-    options?: { configureApp?: (app: App) => Promise<void>; doc?: Document }
+    options?: {
+        configureApp?: (app: App) => Promise<void>;
+        doc?: Document;
+        devMode?: boolean;
+    }
 ) => {
-    const { configureApp, doc = document } = options || {};
+    const { configureApp, doc = document, devMode = false } = options || {};
 
     const componentList: [string, GetVNode][] = Object.entries(components).map(
         ([name, value]) => [kebabCase(name), value]
@@ -319,7 +337,14 @@ export const initiateVueIslands = (
             }
             return [
                 ...result,
-                { element, vNode: getVNodeFromElement(element, vnodesGetter) },
+                {
+                    element,
+                    vNode: getVNodeFromElement(
+                        element,
+                        vnodesGetter,
+                        devMode
+                    ),
+                },
             ];
         }, [])
         .forEach(({ element, vNode }) => {
