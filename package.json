@@ -30,12 +30,19 @@
     "sideEffects": false,
     "scripts": {
         "build": "vite build",
-        "prepublishOnly": "npm run build",
+        "quality": "npm run lint && npm run typecheck && npm test",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
         "typecheck": "tsc --noEmit",
         "test": "playwright test",
-        "test:ui": "playwright test --ui"
+        "test:ui": "playwright test --ui",
+        "prepublishOnly": "npm run build",
+        "prepare": "simple-git-hooks",
+        "preversion": "npm run quality",
+        "postversion": "git push --follow-tags"
+    },
+    "simple-git-hooks": {
+        "pre-push": "npm run quality"
     },
     "peerDependencies": {
         "vue": "^3.0.0",
@@ -60,6 +67,7 @@
         "eslint-plugin-prettier": "^5.5.6",
         "globals": "^17.11.0",
         "prettier": "^3.9.6",
+        "simple-git-hooks": "^2.13.1",
         "typescript": "^6.0.3",
         "typescript-eslint": "^8.68.0",
         "vite": "^8.2.2",

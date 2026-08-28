@@ -232,3 +232,17 @@ npm run typecheck
 npm run lint
 npm run test 
 ```
+
+`npm install` also sets up a `pre-push` git hook (via `simple-git-hooks`) that runs
+`npm run quality` (lint, typecheck, and tests) before every `git push`, aborting the push if any of
+them fail.
+
+## Publishing a new version
+
+1. `npm version patch` (or `minor` / `major`) — runs `npm run quality` first (aborting on failure),
+   then bumps `package.json`, commits, tags the commit `vX.Y.Z`, and pushes the commit and tag to
+   GitHub.
+2. Pushing the `vX.Y.Z` tag triggers the [CI workflow](.github/workflows/ci.yml), which re-runs
+   lint, typecheck, and the test suite on GitHub. Wait for it to pass.
+3. `npm publish` — builds `dist/` (via the `prepublishOnly` script) and publishes the package to
+   npm.
