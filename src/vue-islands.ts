@@ -96,6 +96,8 @@ export const initiateVueIslands = (
                     if (shouldNotReplace) {
                         appendVueIslandInElement(element, mountElement, app);
                     } else {
+                        mountElement.dataset.component =
+                            element.dataset.component;
                         replaceElementWithVueIsland(element, mountElement, app);
                     }
                 } catch (error) {
