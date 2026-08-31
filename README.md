@@ -1,5 +1,32 @@
 # vue-islands
 
+## A lightweight solution for adding SEO-friendly Vue interactivity to server-generated HTML.
+
+`vue-islands` lets you use regular HTML as the foundation of your pages and progressively hydrate individual parts with Vue.
+Rather than making your entire page a Vue application, you can add interactive Vue components exactly where you need them.
+
+This makes it a great fit for applications where SEO is important, but a full SSR setup would be unnecessary or isn’t an option.
+Keep your existing backend, server-side templates, or static HTML, and enhance specific parts of the page with interactive Vue components.
+
+```html
+<div data-component="my-widget">
+  <h2 data-props="title=text-content">Hello world</h2>
+  <p data-props="description=text-content">
+    This content is SEO-friendly.
+  </p>
+</div>
+```
+
+## Why Vue Islands?
+
+- **SEO-friendly**: Because the page is server-rendered, search engines can index it without needing to execute JavaScript. 
+Only the interactive parts are hydrated with Vue.
+- **Progressive hydration**: hydrate only the parts of the page that need to be interactive.
+- **Use any Vue component**: use Vue Islands with your existing Vue components without requiring a specific component structure.
+- **Works with your existing stack**: use your current backend, templating system, or static HTML.
+- **100% W3C-valid HTML**: islands are defined using valid HTML that remains fully semantic.
+- **Lazy-loadable**: components can be loaded only when they’re needed.
+
 Progressively mount Vue components ("islands") into server-rendered semantic HTML, using
 `data-component` attributes to declare which elements should become Vue components.
 

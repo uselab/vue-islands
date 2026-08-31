@@ -9,10 +9,15 @@
     },
     "keywords": [
         "vue",
-        "islands",
-        "islands-architecture",
+        "vue3",
+        "W3C",
+        "seo",
         "progressive-enhancement",
-        "ssr"
+        "progressive-hydration",
+        "hydration",
+        "ssr",
+        "server-side-rendering",
+        "html"
     ],
     "type": "module",
     "main": "./dist/vue-islands.js",
