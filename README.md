@@ -228,6 +228,33 @@ const components: Record<string, GetVNode> = {
 initiateVueIslands(components);
 ```
 
+## Validating props with Zod
+
+Because props parsed from HTML attributes arrive untyped, pairing `validateRawProps` with a Zod
+schema catches malformed markup early and logs a clear console error — including the original,
+unparsed `rawProps` — instead of failing silently or crashing deep inside the component:
+
+```vue
+<script setup lang="ts">
+import * as z from 'zod';
+import { type WithRawProps, validateRawProps } from '@uselab/vue-islands';
+
+type Props = { items: { link?: string; title: string }[] } & WithRawProps;
+
+const props = defineProps<Props>();
+
+const validator = z.object({
+    items: z.array(
+        z.object({
+            link: z.string().optional(),
+            title: z.string(),
+        })
+    ),
+});
+
+validateRawProps<Props>(validator.safeParse(props.rawProps || props), props);
+</script>
+```
 ## API
 
 - `initiateVueIslands(components, options?)` — scans the document (or `options.doc`) for
