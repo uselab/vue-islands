@@ -1,6 +1,6 @@
 {
     "name": "@uselab/vue-islands",
-    "version": "0.1.0",
+    "version": "1.0.0",
     "description": "Progressively mount Vue components (\"islands\") into server-rendered semantic HTML using data attributes.",
     "license": "MIT",
     "repository": {
