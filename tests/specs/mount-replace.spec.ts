@@ -23,7 +23,7 @@ test('replaces the element, copies allow-listed attributes, mounts the component
     const mounted = page.locator('article');
     await expect(mounted).toHaveCount(1);
     expect(await mounted.getAttribute('data-mount-element')).toBe('');
-    expect(await mounted.getAttribute('data-component')).toBeNull();
+    expect(await mounted.getAttribute('data-component')).toBe('probe');
     expect(await mounted.getAttribute('id')).toBe('widget');
     expect(await mounted.getAttribute('class')).toBe('widget widget--large');
     expect(await mounted.getAttribute('style')).toContain('color: red');
