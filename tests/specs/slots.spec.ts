@@ -29,3 +29,29 @@ test('groups slot content by slot/data-slot attribute, matches a camelCase compo
 
     await expect(namedSlot.locator('[data-testid="probe"]')).toHaveCount(0);
 });
+
+test('adds bare text nodes and comment nodes to the default slot', async ({
+    page,
+    mountIsland,
+}) => {
+    await mountIsland(
+        `<div data-component="slots-probe">
+            Bare text
+            <!-- a comment -->
+        </div>`,
+        ['slotsProbe']
+    );
+
+    const defaultSlot = page.locator('[data-testid="default-slot"]');
+
+    await expect(defaultSlot).toContainText('Bare text');
+
+    const hasComment = await defaultSlot.evaluate((el) =>
+        Array.from(el.childNodes).some(
+            (node) =>
+                node.nodeType === Node.COMMENT_NODE &&
+                node.textContent?.includes('a comment')
+        )
+    );
+    expect(hasComment).toBe(true);
+});

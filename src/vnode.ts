@@ -75,12 +75,13 @@ export const getVNodeFromElement = (
             );
         }
         const props = getPropsFromElement(element);
-        const childElements = Array.from(element.children).filter(
+        const slotNodes = Array.from(element.childNodes).filter(
             (child) =>
-                isHtmlElement(child) &&
-                (!child.dataset.props || child.dataset.component)
+                !isHtmlElement(child) ||
+                !child.dataset.props ||
+                child.dataset.component
         );
-        const slots = getVNodeSlots(childElements);
+        const slots = getVNodeSlots(slotNodes);
         return getVNodesFunction(props, slots);
     }
 
