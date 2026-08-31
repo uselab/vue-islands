@@ -1,7 +1,7 @@
 import { type Locator, test as base, expect } from '@playwright/test';
 
 type MountOptions = {
-    devMode?: boolean;
+    isDevMode?: boolean;
     withTheme?: string;
 };
 

@@ -32,10 +32,10 @@ export const initiateVueIslands = (
     options?: {
         configureApp?: (app: App) => Promise<void>;
         doc?: Document;
-        devMode?: boolean;
+        isDevMode?: boolean;
     }
 ) => {
-    const { configureApp, doc = document, devMode = false } = options || {};
+    const { configureApp, doc = document, isDevMode = false } = options || {};
 
     const componentList: [string, GetVNode][] = Object.entries(components).map(
         ([name, value]) => [kebabCase(name), value]
@@ -67,7 +67,9 @@ export const initiateVueIslands = (
                 ...result,
                 {
                     element,
-                    vNode: getVNodeFromElement(element, vnodesGetter, devMode),
+                    vNode: getVNodeFromElement(element, vnodesGetter, {
+                        isDevMode,
+                    }),
                 },
             ];
         }, [])

@@ -6,7 +6,7 @@ import type { GetVNodeFunction } from './types';
 export const getVNodeFromElement = (
     element: HTMLElement,
     vnodesGetter: GetVNodeFunction,
-    devMode: boolean
+    options: { isDevMode: boolean }
 ): VNode => {
     const componentName = element.dataset.component;
     const getVNodesFunction = vnodesGetter(componentName);
@@ -22,14 +22,25 @@ export const getVNodeFromElement = (
                 // text
                 return [...result, h(Text, node.textContent)];
             }
-            if (node.nodeType === Node.TEXT_NODE && node.textContent) {
+            if (node.nodeType === Node.COMMENT_NODE && node.textContent) {
                 // comment
                 return [...result, h(Comment, node.textContent)];
             }
             if (isHtmlElement(node)) {
+                if (
+                    node.dataset.component &&
+                    node.dataset.keepSemanticHtml !== undefined &&
+                    options.isDevMode
+                ) {
+                    // eslint-disable-next-line no-console
+                    console.warn(
+                        `[semantic-html-to-vue] data-keep-semantic-html has no effect on nested component "${node.dataset.component}" — it only applies to root data-component elements.`
+                    );
+                }
+
                 return [
                     ...result,
-                    getVNodeFromElement(node, vnodesGetter, devMode),
+                    getVNodeFromElement(node, vnodesGetter, options),
                 ];
             }
             return result;
@@ -57,7 +68,7 @@ export const getVNodeFromElement = (
     };
 
     if (getVNodesFunction) {
-        if (devMode) {
+        if (options.isDevMode) {
             // eslint-disable-next-line no-console
             console.info(
                 `[semantic-html-to-vue] Rendering component: ${componentName}`

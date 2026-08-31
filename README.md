@@ -45,7 +45,7 @@ const components: Record<string, GetVNode> = {
 
 initiateVueIslands(components, {
     // Optional: enable dev-only console logging of which islands get mounted.
-    devMode: import.meta.env.DEV,
+    isDevMode: import.meta.env.DEV,
 });
 ```
 
@@ -55,7 +55,7 @@ so `menu`, `heavyChart`, and `imageCarousel` above match `data-component="menu"`
 `data-component="heavy-chart"`, and `data-component="image-carousel"` respectively.
 
 Each matching element is replaced (or, with `data-keep-semantic-html`, appended into) with a
-mounted Vue app rendering the corresponding component, using attributes/`data-props` as props and
+mounted Vue app rendering the corresponding component, using `attributes`/`data-props` as props and
 child elements as slots.
 
 ## Declaring components and props in HTML
@@ -81,6 +81,10 @@ Props can be defined in several ways:
   the element's `href` value.
 - In `data-props`, using `text-content` to read the element's text: `<div
   data-component="my-widget" data-props="title=text-content">Boo</div>`
+- In `data-props`, JSON parsing applies when either side of the mapping ends in `-json`: `<div
+  data-component="my-widget" data-items-json="[1,2,3]" data-props="items=data-items-json">` and
+  `<div data-component="my-widget" data-props="items-json=text-content">[1,2,3]</div>` both parse
+  the value as JSON.
 - On any descendant element that has `data-props` but **not** `data-component` — useful for
   composing a prop object from several child elements without introducing extra slot markup.
 
@@ -104,6 +108,24 @@ islands) are passed through as slots instead, grouped by their `slot` or `data-s
     <div slot="footer">Baa</div>
 </div>
 ```
+
+A descendant element with its own `data-component` attribute is rendered as a normal Vue component
+within the parent island, so slot content can include other registered components:
+
+```html
+<div data-component="my-widget">
+    <div slot="header">
+        <span data-component="user-badge" data-name="Boo"></span>
+    </div>
+</div>
+```
+
+These nested components are **not** separate vue-islands — only the root `[data-component]`
+elements queried by `initiateVueIslands` are individually mounted as their own `App` instance and
+replace (or append into) their host element. A `data-component` found while walking a parent
+island's slot content is turned into a plain Vue vnode instead, rendered as part of that parent
+app. As a result, `data-keep-semantic-html` (and the replace-vs-append behavior it controls) only
+has an effect on root elements; setting it on a nested component has no effect.
 
 ## Configuring each mounted app
 
@@ -211,7 +233,7 @@ initiateVueIslands(components);
 - `initiateVueIslands(components, options?)` — scans the document (or `options.doc`) for
   `[data-component]` elements and mounts the matching Vue components (see "Declaring components
   and props in HTML" above for the supported `data-*` attributes).
-  - `options.devMode?: boolean` — enables verbose console logging for debugging (default
+  - `options.isDevMode?: boolean` — enables verbose console logging for debugging (default
     `false`).
   - `options.configureApp?: (app: App) => Promise<void>` — called for each created Vue `App`
     instance before mounting, useful for registering plugins/directives (see "Configuring each

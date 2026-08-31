@@ -2,7 +2,7 @@ import { initiateVueIslands } from '../../src/vue-islands';
 import { components } from './test-components';
 
 type MountOptions = {
-    devMode?: boolean;
+    isDevMode?: boolean;
     withTheme?: string;
     doc?: Document;
 };
@@ -21,7 +21,7 @@ window.__vueIslands = {
             Object.entries(components).filter(([name]) => names.includes(name))
         );
         initiateVueIslands(selected, {
-            devMode: options.devMode,
+            isDevMode: options.isDevMode,
             doc: options.doc,
             configureApp: options.withTheme
                 ? (app) => {

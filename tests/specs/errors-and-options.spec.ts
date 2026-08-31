@@ -21,7 +21,7 @@ test('logs an error and leaves the element unmounted when the component is not r
     await expect(el.locator('[data-mount-element]')).toHaveCount(0);
 });
 
-test('logs a devMode info message before mounting', async ({
+test('logs a info message before mounting in dev mode', async ({
     page,
     mountIsland,
 }) => {
@@ -31,7 +31,7 @@ test('logs a devMode info message before mounting', async ({
     });
 
     await mountIsland(`<div data-component="probe"></div>`, ['probe'], {
-        devMode: true,
+        isDevMode: true,
     });
 
     await expect(page.locator('[data-testid="probe"]')).toBeVisible();
