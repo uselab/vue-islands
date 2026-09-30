@@ -320,3 +320,7 @@ them fail.
    lint, typecheck, and the test suite on GitHub. Wait for it to pass.
 3. `npm publish` — builds `dist/` (via the `prepublishOnly` script) and publishes the package to
    npm.
+
+## License
+
+[MIT](LICENSE) © Uselab
